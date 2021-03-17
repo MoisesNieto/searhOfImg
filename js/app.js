@@ -18,6 +18,7 @@ function checkForm(e){
         showAlert('Add a search term');
         return;
     }
+
     
     consultApi();
 }
@@ -36,18 +37,20 @@ function showAlert(menssage){
     } 
      
 }
-function consultApi(){
+ async function consultApi(){
     const termino = document.querySelector('#termino').value;
 
     const ApiKey = '20709083-b43293daa0caf038dc07252d5';
     const url = `https://pixabay.com/api/?key=${ApiKey}&q=${termino}&per_page=${recordForPage}&page=${pageActual}`;
 
-    fetch(url)
-    .then (result => result.json())
-    .then (date => {
+    try{
+        const respuesta = await fetch(url);
+        const date = await respuesta.json();
         totalPage = calculatePages(date.totalHits);
         showImg(date.hits);
-    });
+    }catch(error){
+        console.log(error);
+    }
 }
 
 function showImg(resultImg){
